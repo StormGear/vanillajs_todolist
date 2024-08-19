@@ -19,10 +19,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active logged-out" aria-current="page" href="#">Login &nbsp; <i class="fa-solid fa-right-to-bracket"></i></a>
+                <a class="nav-link active logged-out" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#login-modal">Login &nbsp; <i class="fa-solid fa-right-to-bracket"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link logged-out" href="#">Signup &nbsp; <i class="fa-solid fa-user-plus"></i></a>
+                <a class="nav-link logged-out" href="#" data-bs-toggle="modal" data-bs-target="#signup-modal">Signup &nbsp; <i class="fa-solid fa-user-plus"></i></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link logged-in" href="#">Signout</a>
@@ -80,32 +80,96 @@
        <div class="modal-dialog">
          <div class="modal-content">
            <div class="modal-header">
-             <h5 class="modal-title">Edit Task</h5>
+             <h5 class="modal-title">Login</h5>
              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
            </div>
            <div class="modal-body">
              <div>
                <div class="container">
-                 <div class="row">
-                      <div class="mt-5">
-                           <div class="input-group mb-3">
-                             <input type="text" id="login" class="form-control" placeholder="Update Task">
-                           </div>
+                 <form class="row"> 
+                      <div class="col">
+                        <label class="visually-hidden" for="autoSizingInputGroup">Email</label>
+                        <div class="input-group">
+                          <div class="input-group-text">@</div>
+                          <input type="text" class="form-control" id="login-email" placeholder="Email">
+                          <div class="valid-feedback">
+                            Looks good!
+                          </div>
+                          <div class="invalid-feedback">
+                            Please enter a valid email
+                          </div>                      
+                        </div>
                       </div>
+                      <div class="input-group mt-3">
+                               <input type="password" class="form-control" placeholder="Enter a password" id="login-password">
+                               <div class="valid-feedback">
+                                Looks good!
+                              </div>
+                              <div class="invalid-feedback">
+                                Please enter a valid password
+                              </div>
+                      </div>
+                     
                  </div>
-               </div>
+                </form>
              </div>
            </div>
            <div class="modal-footer">
              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-             <button type="button" class="btn btn-primary" id="save-changes" data-bs-dismiss="modal">Save changes</button>
+             <button type="submit" class="btn btn-primary" id="login-button">Login</button>
            </div>
          </div>
        </div>
      </div>
      
-     <!-- modal for signup -->
-     <div class="modal" tabindex="-1" id="edit-task-modal">
+     <!-- modal for signup  -->
+     <div class="modal" tabindex="-1" id="signup-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Signup</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <div class="container">
+                <div class="row">
+                     <form action="">
+                       <div class="mt-1">
+                            <div class="input-group mb-3">
+                              <input type="email" class="form-control" placeholder="Enter email (e.g todolist@example.com)" id="signup-email">
+                              <div class="valid-feedback">
+                                Looks good!
+                              </div>
+                              <div class="invalid-feedback">
+                                Please enter a valid email
+                              </div>
+                            </div>
+                            <div class="input-group mb-3">
+                              <input type="password" class="form-control" placeholder="Enter a password" id="signup-password">
+                              <div class="valid-feedback">
+                                Looks good!
+                              </div>
+                              <div class="invalid-feedback">
+                                Please enter a valid password
+                              </div>
+                            </div>
+                       </div>
+                     </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary" id="signup-button">Signup</button>
+          </div>
+        </div>
+      </div>
+    </div>
+     <!-- modal for editting -->
+     <div class="modal" tabindex="-1" id="signup-modal">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -118,7 +182,7 @@
                 <div class="row">
                      <div class="mt-5">
                           <div class="input-group mb-3">
-                            <input type="text" id="edit-task" class="form-control" placeholder="Update Task" aria-label="Edit Task" aria-describedby="edit-task">
+                            <input type="text" class="form-control" placeholder="Update Task" aria-label="Edit Task" aria-describedby="signup">
                           </div>
                      </div>
                 </div>
