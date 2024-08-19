@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import date from 'date-and-time';
 
 
@@ -26,8 +26,6 @@ listenToTodosChanges()
 // Add click event listened to get text from the input field
 document.getElementById("add-task-button").addEventListener("click", addTodoToFirestore);
 
-// Add click event listener to delete a task
-const deleteButton = document.querySelectorAll(".fa-trash");
 
 
 
@@ -53,13 +51,42 @@ function renderTodoList(data, id) {
     </div>
     `;
     todoList.appendChild(li);
-    const deleteButton = document.getElementById(id);
-    deleteButton.addEventListener("click",(e) => deleteTodo(e));
+    const deleteButton = li.children[0].children[1].children[1];
+    const editButton = li.children[0].children[1].children[0];
+    deleteButton.addEventListener("click", (e) => deleteTodo(e));
+    editButton.addEventListener("click", (e) => editTodoModal(e));
 }
 
 function deleteTodo(e) {
     e.preventDefault();
+    console.log(e.target.parentElement.parentElement.parentElement.id);
     deleteDoc(doc(db, "todos", e.target.parentElement.parentElement.parentElement.id)).then(() => console.log('Document deleted')).catch(e => console.error('Error deleting document', e));
+}
+
+function editTodoModal(e) { 
+    const element = e.target.parentElement.parentElement.parentElement;
+    console.log(element.id);
+    const editTask = document.getElementById("edit-task");
+    editTask.value = element.children[0].children[0].innerText;
+    editTask.addEventListener("input", (e) => console.log(e.target.value));
+    document.getElementById("save-changes").addEventListener("click", (e) => 
+        {
+            console.log(`This element has been updated ${element.id}`);
+            const todosRef = doc(db, "todos", element.id);
+            updateDoc(todosRef, {
+            title: editTask.value,
+            updatedAt: new Date()
+            }).then(() => {
+                console.log("Document successfully updated!");
+            }).catch((error) => {
+                console.error("Error updating document: ", error);
+        });
+    });
+}
+
+function saveChanges(e, id) {
+   
+
 }
 
 
@@ -76,6 +103,7 @@ function addTodoToFirestore() {
         updatedAt: new Date()
     }).then(() => {
         console.log("Document successfully written!");
+        document.getElementById("add-task").value = "";
     }).catch((error) => {
         console.error("Error writing document: ", error);
     });
