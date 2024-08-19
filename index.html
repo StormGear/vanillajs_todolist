@@ -19,10 +19,13 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Login &nbsp; <i class="fa-solid fa-right-to-bracket"></i></a>
+                <a class="nav-link active logged-out" aria-current="page" href="#">Login &nbsp; <i class="fa-solid fa-right-to-bracket"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Signup &nbsp; <i class="fa-solid fa-user-plus"></i></a>
+                <a class="nav-link logged-out" href="#">Signup &nbsp; <i class="fa-solid fa-user-plus"></i></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link logged-in" href="#">Signout</a>
               </li>
             </ul>
           </div>
@@ -71,6 +74,64 @@
           </div>
         </div>
       </div>
+      
+      <!-- modal for login  -->
+      <div class="modal" tabindex="-1" id="login-modal">
+       <div class="modal-dialog">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modal-title">Edit Task</h5>
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modal-body">
+             <div>
+               <div class="container">
+                 <div class="row">
+                      <div class="mt-5">
+                           <div class="input-group mb-3">
+                             <input type="text" id="login" class="form-control" placeholder="Update Task">
+                           </div>
+                      </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button type="button" class="btn btn-primary" id="save-changes" data-bs-dismiss="modal">Save changes</button>
+           </div>
+         </div>
+       </div>
+     </div>
+     
+     <!-- modal for signup -->
+     <div class="modal" tabindex="-1" id="edit-task-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Edit Task</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div>
+              <div class="container">
+                <div class="row">
+                     <div class="mt-5">
+                          <div class="input-group mb-3">
+                            <input type="text" id="edit-task" class="form-control" placeholder="Update Task" aria-label="Edit Task" aria-describedby="edit-task">
+                          </div>
+                     </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="save-changes" data-bs-dismiss="modal">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
         <!-- Task List  -->
         <div>

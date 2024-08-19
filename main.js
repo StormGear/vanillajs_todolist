@@ -1,12 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import date from 'date-and-time';
-import el from "date-and-time/locale/el";
-
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyA4f2DSrg8_0UgwDClUKPBEV8mTDaM7zNI",
+    apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
     authDomain: "vanilla-js-todolist.firebaseapp.com",
     projectId: "vanilla-js-todolist",
     storageBucket: "vanilla-js-todolist.appspot.com",
