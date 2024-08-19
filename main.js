@@ -1,6 +1,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc } from "firebase/firestore";
 import date from 'date-and-time';
+import el from "date-and-time/locale/el";
+
 
 
 const firebaseConfig = {
@@ -20,6 +22,7 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Cloud Firestore and get a reference to the service
 const db = getFirestore(app);
+
 
 listenToTodosChanges()
 
@@ -78,6 +81,7 @@ function editTodoModal(e) {
             updatedAt: new Date()
             }).then(() => {
                 console.log("Document successfully updated!");
+                element.children[0].children[0].innerText = editTask.value;
             }).catch((error) => {
                 console.error("Error updating document: ", error);
         });
