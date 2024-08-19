@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+     <link rel="stylesheet" href="./style.css">
+    <script src="https://kit.fontawesome.com/185a70980e.js" crossorigin="anonymous"></script>         
+    <title>Vanilla JS TodoList</title>
+</head>
+<body>
+    <!-- Navbar  -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand text-primary" href="#"> <b>TodoList</b></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Add Task field  -->
+       <div>
+              <div class="container">
+                <div class="row">
+                     <div class="col-md-6 offset-md-3  mt-5">
+                          <div class="input-group mb-3">
+                            <input type="text" id="add-task" class="form-control" placeholder="Add Task" aria-label="Add Task" aria-describedby="add-task">
+                            <button class="btn btn-primary" type="button" id="add-task-button">Add Task</button>
+                          </div>
+                     </div>
+                </div>
+              </div>
+       </div>
+
+       <!-- modal for adding task  -->
+       <div class="modal" tabindex="-1" id="add-task-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Modal title</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+       <!-- modal for editting task  -->
+       <div class="modal" tabindex="-1" id="edit-task-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Edit Task</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Modal body text goes here.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <!-- Task List  -->
+        <div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 offset-md-3 mt-5">
+                        <ul class="list-group">
+                     
+                          </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+      <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" async defer></script>
+      <script src="/main.js" type="module"></script>
+</body>
+</html>
