@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "firebase/firestore";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc } from "firebase/firestore";
 import date from 'date-and-time';
 
 
@@ -32,11 +32,11 @@ const deleteButton = document.querySelectorAll(".fa-trash");
 
 
 
-function renderTodoList(data) {
+function renderTodoList(data, id) {
     const todoList = document.querySelector(".list-group");
     const li = document.createElement("li");
     li.classList.add("list-group-item");
-    li.id = idCounter++;
+    li.id = id;
     const now = new Date();
     const createdAtDate = data.createdAt.toDate(); 
     li.innerHTML = `
@@ -53,7 +53,13 @@ function renderTodoList(data) {
     </div>
     `;
     todoList.appendChild(li);
+    const deleteButton = document.getElementById(id);
+    deleteButton.addEventListener("click",(e) => deleteTodo(e));
+}
 
+function deleteTodo(e) {
+    e.preventDefault();
+    deleteDoc(doc(db, "todos", e.target.parentElement.parentElement.parentElement.id)).then(() => console.log('Document deleted')).catch(e => console.error('Error deleting document', e));
 }
 
 
@@ -83,13 +89,19 @@ function listenToTodosChanges() {
         onSnapshot(q, (snapshot) => {
             snapshot.docChanges().forEach((change) => {
                 if (change.type === "added") {
-                    renderTodoList(change.doc.data());
+                    renderTodoList(change.doc.data(), change.doc.id);
                 }
                 if (change.type === "modified") {
                     console.log(`${change.doc.data()} was modified` );
                 }
                 if (change.type === "removed") {
                     console.log(`${change.doc.data()} was removed`);
+                    const li = document.getElementById(change.doc.id);
+                    if (li) {
+                        li.remove();
+                    } else {
+                        console.log('Element not found');
+                    }
                 }
             })},
             (error) => {
