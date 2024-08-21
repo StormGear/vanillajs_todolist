@@ -71,6 +71,8 @@ function createUser(email, password) {
      .then((userCredential) => {
     // Signed up 
     console.log(`User created: User ${userCredential.user.email}`);    
+    signupEmail.value = "";
+    signupPassword.value = "";
     const p = document.createElement('p');
     p.classList.add('text-primary')
     p.innerText = `User created successfully!`
@@ -124,6 +126,7 @@ async function signOutUser() {
         document.getElementById("signup-button").style.display = "block";
         document.getElementById("login-button").style.display = "block";
         document.getElementById("login").style.display = "block";
+        document.getElementById("login-link").removeChild(document.getElementById("login-link").children[1]);
     } catch (e) {
         console.error('Error signing out user', e);
     }
@@ -173,9 +176,12 @@ signInWithEmailAndPassword(auth, email, password)
     document.getElementById("signup-button").style.display = "none";
     document.getElementById("login-button").style.display = "none";
     document.getElementById("login").style.display = "none"; 
-    const span = document.createElement('span');
-    span.innerText = `Signed in as ${user}`;
-    document.getElementById("login-link").appendChild(span);
+    loginEmail.value = "";
+    loginPassword.value = "";
+    const a = document.createElement('a');
+    a.classList.add('nav-link');
+    a.innerText = `Signed in as ${user}`;
+    document.getElementById("login-link").appendChild(a);
     listenToTodosChanges();
   })
   .catch((error) => {
@@ -376,7 +382,6 @@ function listenToTodosChanges() {
         console.log('User not signed in');
         document.getElementById("add-task-field").style.display = "none";
         document.getElementById("signout-button").style.display = "none";
-        document.getElementById("login-link").removeChild(document.getElementById("login-link").children[1]);
     }
     } catch (e) { 
         console.error("Error listening to changes: ", e);
