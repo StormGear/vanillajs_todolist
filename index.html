@@ -19,21 +19,36 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active logged-out" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#login-modal">Login &nbsp; <i class="fa-solid fa-right-to-bracket"></i></a>
+                <a class="nav-link active logged-out" aria-current="page" href="#" data-bs-toggle="modal" data-bs-target="#login-modal" id="login">Login &nbsp; <i class="fa-solid fa-right-to-bracket"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link logged-out" href="#" data-bs-toggle="modal" data-bs-target="#signup-modal">Signup &nbsp; <i class="fa-solid fa-user-plus"></i></a>
+                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#signup-modal" id="signup-button">Signup &nbsp; <i class="fa-solid fa-user-plus"></i></a>
               </li>
               <li class="nav-item">
-                <a class="nav-link logged-in" href="#">Signout</a>
+                <a class="nav-link" href="#" id="signout-button" style="display: none;">Signout</a>
               </li>
             </ul>
           </div>
         </div>
       </nav>
 
+      <div id="prompt-signin">
+        <div class="container text-center">
+          <div class="row">
+            <div class="col-md-6 mt-5">
+              <div>Welcome to <span class="navbar-brand text-primary">TodoList</span></div>
+              <div>
+                Sign in or Sign up
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
       <!-- Add Task field  -->
-       <div>
+       <div id="add-task-field" style="display: none;">
               <div class="container">
                 <div class="row">
                      <div class="col-md-6 offset-md-3  mt-5">
@@ -112,6 +127,9 @@
                      
                  </div>
                 </form>
+                <div id="login-auth-feedback" class="text-center">
+
+                </div>
              </div>
            </div>
            <div class="modal-footer">
@@ -156,6 +174,9 @@
                             </div>
                        </div>
                      </form>
+                     <div id="signup-auth-feedback" class="text-center">
+
+                     </div>
                 </div>
               </div>
             </div>
@@ -212,6 +233,6 @@
 
 
       <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" async defer></script>
-      <script src="/main.js" type="module"></script>
+      <script src="/main.js" type="module" async defer></script>
 </body>
 </html>

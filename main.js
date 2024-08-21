@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc } from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc , setDoc} from "firebase/firestore";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import date from 'date-and-time';
 
 
@@ -27,20 +27,46 @@ const auth = getAuth();
 function createUser(email, password) {
     if (validateEmail(signupEmail.value) && validatePassword(signupPassword.value)) {
     createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
+     .then((userCredential) => {
     // Signed up 
-    console.log(`User created: User ${userCredential.user}`);
+    console.log(`User created: User ${userCredential.user.email}`);    
+    const p = document.createElement('p');
+    p.classList.add('text-primary')
+    p.innerText = `User created successfully!`
+    document.getElementById('signup-auth-feedback').appendChild(p);
+    // Add a new document with a generated id
+    const newUserRef = doc(db, "users", userCredential.user.uid);
+    const docData = {
+        email: email,
+    };
+    // later...
+    setDoc(newUserRef, docData).then(() => {
+        console.log('User created in db');
+     }).catch(e => console.log('Error creating user in db', e));
   })
   .catch((error) => {
     console.log(`Error creating user with code ${error.code} and message ${error.message}`);
+    const p = document.createElement('p');
+    p.classList.add('text-danger')
+    p.innerText = `Error creating user with code ${error.code} and message ${error.message}`;
+    const signupFeedback = document.getElementById('signup-auth-feedback');
+    if (signupFeedback.children.length == 0) {
+    document.getElementById('signup-auth-feedback').appendChild(p);
+    console.log(`Error creating user with code ${error.code} and message ${error.message}`);
+    // document.getElementById('signup-button').setAttribute('data-bs-dismiss',"modal") ;
+    } else {
+        if (p.innerText == signupFeedback.children[0].innerText) {
+            console.log('Avoiding repetition');
+            return;
+        } else {
+            p.innerText = `Error creating user with code ${error.code} and message ${error.message}`;
+        }
+    }
   });
 } else {
     console.log('Enter valid email or password.')
 }
 }
-
-
-listenToTodosChanges()
 
 // Add click event listened to get text from the input field
 document.getElementById("add-task-button").addEventListener("click", addTodoToFirestore);
@@ -49,20 +75,25 @@ const loginPassword = document.getElementById("login-password");
 const signupEmail = document.getElementById("signup-email");
 const signupPassword = document.getElementById("signup-password");
 
-// Add blur event listener to validate email and password
-loginEmail.addEventListener('blur', (e) => validateLoginEmailAndPassword(e));
-loginPassword.addEventListener('blur', (e) => validateLoginEmailAndPassword(e));
+// Add input event listener to validate email and password
+loginEmail.addEventListener('input', (e) => validateLoginEmailAndPassword(e));
+loginPassword.addEventListener('input', (e) => validateLoginEmailAndPassword(e));
 // Add click event listener to validate email and password
-document.getElementById("login-button").addEventListener("blur", (e) => validateLoginEmailAndPassword(e));
+document.getElementById("login-button").addEventListener("click", (e) =>
+    { 
+        validateLoginEmailAndPassword(e);
+        loginUser(loginEmail.value, loginPassword.value);
+    });
 
 // Add click event listener to validate email and password
 document.getElementById("signup-button").addEventListener("click", (e) => { 
     validateSignupEmailAndPassword(e);
     createUser(signupEmail.value, signupPassword.value);
+
 });
 // Add blur event listener to validate email and password
-signupEmail.addEventListener('blur', (e) => validateSignupEmailAndPassword(e));
-signupPassword.addEventListener('blur', (e) => validateSignupEmailAndPassword(e));
+signupEmail.addEventListener('input', (e) => validateSignupEmailAndPassword(e));
+signupPassword.addEventListener('input', (e) => validateSignupEmailAndPassword(e));
 
 function validateSignupEmailAndPassword(event) {
     event.preventDefault();
@@ -85,6 +116,72 @@ function validateSignupEmailAndPassword(event) {
         signupPassword.nextElementSibling.style.display = "none";
         signupPassword.nextElementSibling.nextElementSibling.style.display = "block";
     }
+
+}
+
+function loginUser(email, password) { 
+signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user.email;
+    console.log(`User ${user} signed in`);
+    document.getElementById("add-task-field").style.display = "block";
+    document.getElementById("signout-button").style.display = "block";
+    document.getElementById("prompt-signin").style.display = "none";
+    document.getElementById("signup-button").style.display = "none";
+    document.getElementById("login-button").style.display = "none";
+    document.getElementById("login").style.display = "none";
+    listenToTodosChanges();
+  })
+  .catch((error) => {
+    console.log(`Error creating user with code ${error.code} and message ${error.message}`);
+    const p = document.createElement('p');
+    p.classList.add('text-danger')
+    p.classList.add('mt-2')
+    switch (error.code) {
+        case 'auth/user-not-found':
+            p.innerText = `User not found. Please sign up.`;
+            break;
+        case 'auth/wrong-password':
+            p.innerText = `Wrong password. Please try again.`;
+            break;
+        case 'auth/too-many-requests':
+            p.innerText = `Too many requests. Please try again later.`;
+            break;
+        case 'auth/invalid-email':
+            p.innerText = `Invalid email. Please enter a valid email.`;
+            break;
+        default:
+            p.innerText = `Error creating user with code ${error.code} and message ${error.message}`;
+            break;
+    }
+    const loginFeedback = document.getElementById('login-auth-feedback');
+    if (loginFeedback.children.length == 0) {
+    loginFeedback.appendChild(p);
+    } else {
+        if (p.innerText == loginFeedback.children[0].innerText) {
+            console.log('Avoiding repetition');
+            return;
+        } else {
+            p.innerText = `Error creating user with code ${error.code} and message ${error.message}`;
+        }
+    }
+  });
+    // onAuthStateChanged(auth, (user) => {
+    //     if (user) {
+    //       // User is signed in, see docs for a list of available properties
+    //       // https://firebase.google.com/docs/reference/js/auth.user
+    //       const uid = user.uid;
+    //         console.log(`User is signed in with uid ${uid}`);
+    //         listenToTodosChanges(); 
+    //       // ...
+    //     } else {
+    //       // User is signed out
+    //       // ...
+    //         console.log('User is signed out');
+    //         listenToTodosChanges();
+    //     }
+    //   });
 
 }
 
@@ -145,7 +242,7 @@ function renderTodoList(data, id) {
 function deleteTodo(e) {
     e.preventDefault();
     console.log(e.target.parentElement.parentElement.parentElement.id);
-    deleteDoc(doc(db, "todos", e.target.parentElement.parentElement.parentElement.id)).then(() => console.log('Document deleted')).catch(e => console.error('Error deleting document', e));
+    deleteDoc(doc(db, "users", auth.currentUser.uid, "todos",  e.target.parentElement.parentElement.parentElement.id)).then(() => console.log('Document deleted')).catch(e => console.error('Error deleting document', e));
 }
 
 function validateEmail(email) {
@@ -168,7 +265,7 @@ function editTodoModal(e) {
     document.getElementById("save-changes").addEventListener("click", (e) => 
         {
             console.log(`This element has been updated ${element.id}`);
-            const todosRef = doc(db, "todos", element.id);
+            const todosRef = doc(db, "users", auth.currentUser.uid, "todos", element.id);
             updateDoc(todosRef, {
             title: editTask.value,
             updatedAt: new Date()
@@ -187,7 +284,7 @@ function editTodoModal(e) {
 // Add a new todo to the Firestore database
 function addTodoToFirestore() { 
     textFromInputField = document.getElementById("add-task").value;;
-    const todos = collection(db, "todos");
+    const todos = collection(db, "users", auth.currentUser.uid, "todos");
     addDoc(todos, {
         title: textFromInputField,
         createdAt: new Date(),
@@ -203,11 +300,14 @@ function addTodoToFirestore() {
 
 function listenToTodosChanges() {
     try {
-        const todosRef = collection(db, "todos");
+        if (auth.currentUser) {
+        const todosRef = collection(db, "users", auth.currentUser.uid, "todos");
         const q = query(todosRef, orderBy("createdAt", "desc"));
+
         onSnapshot(q, (snapshot) => {
             snapshot.docChanges().forEach((change) => {
                 if (change.type === "added") {
+                    console.log('New todo added');
                     renderTodoList(change.doc.data(), change.doc.id);
                 }
                 if (change.type === "modified") {
@@ -225,8 +325,13 @@ function listenToTodosChanges() {
             })},
             (error) => {
                 console.log('Error retrieving documents', error);
-            }
+            },
         );
+    } else {
+        console.log('User not signed in');
+        document.getElementById("add-task-field").style.display = "none";
+        document.getElementById("signout-button").style.display = "none";
+    }
     } catch (e) { 
         console.error("Error listening to changes: ", e);
     }
