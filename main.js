@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, updateDoc , setDoc} from "firebase/firestore";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import date from 'date-and-time';
 
 
@@ -24,6 +24,47 @@ const db = getFirestore(app);
 // Initialize Authentication
 const auth = getAuth();
 
+/// Include all event listeners here
+// Add click event listened to get text from the input field
+document.getElementById("add-task-button").addEventListener("click", addTodoToFirestore);
+const loginEmail = document.getElementById("login-email");
+const loginPassword = document.getElementById("login-password");
+const signupEmail = document.getElementById("signup-email");
+const signupPassword = document.getElementById("signup-password");
+
+// Add input event listener to validate email and password
+loginEmail.addEventListener('input', (e) => validateLoginEmailAndPassword(e));
+loginPassword.addEventListener('input', (e) => validateLoginEmailAndPassword(e));
+// Add click event listener to validate email and password
+document.getElementById("login-button").addEventListener("click", (e) =>
+    { 
+        validateLoginEmailAndPassword(e);
+        loginUser(loginEmail.value, loginPassword.value);
+    });
+
+// Add click event listener to validate email and password
+document.getElementById("signup-button").addEventListener("click", (e) => { 
+    validateSignupEmailAndPassword(e);
+    createUser(signupEmail.value, signupPassword.value);
+});
+// Add blur event listener to validate email and password
+signupEmail.addEventListener('input', (e) => validateSignupEmailAndPassword(e));
+signupPassword.addEventListener('input', (e) => validateSignupEmailAndPassword(e));
+// Add click event listener to sign out user
+document.getElementById("signout-button").addEventListener("click", async () => await signOutUser());
+
+
+/**
+ * The function `createUser` takes an email and password, validates them, and then creates a new user
+ * account with the provided credentials, displaying success or error messages accordingly.
+ * @param email - The `email` parameter in the `createUser` function is the email address that the user
+ * provides during the signup process. It is used as a unique identifier for the user's account and for
+ * communication purposes.
+ * @param password - The code snippet you provided is a function that creates a user with an email and
+ * password in a Firebase authentication system. The function first validates the email and password
+ * using `validateEmail` and `validatePassword` functions. If the email and password are valid, it then
+ * calls `createUserWithEmailAndPassword` to create a new user account with the provided email and password.
+ */
 function createUser(email, password) {
     if (validateEmail(signupEmail.value) && validatePassword(signupPassword.value)) {
     createUserWithEmailAndPassword(auth, email, password)
@@ -68,33 +109,34 @@ function createUser(email, password) {
 }
 }
 
-// Add click event listened to get text from the input field
-document.getElementById("add-task-button").addEventListener("click", addTodoToFirestore);
-const loginEmail = document.getElementById("login-email");
-const loginPassword = document.getElementById("login-password");
-const signupEmail = document.getElementById("signup-email");
-const signupPassword = document.getElementById("signup-password");
 
-// Add input event listener to validate email and password
-loginEmail.addEventListener('input', (e) => validateLoginEmailAndPassword(e));
-loginPassword.addEventListener('input', (e) => validateLoginEmailAndPassword(e));
-// Add click event listener to validate email and password
-document.getElementById("login-button").addEventListener("click", (e) =>
-    { 
-        validateLoginEmailAndPassword(e);
-        loginUser(loginEmail.value, loginPassword.value);
-    });
+/**
+ * The function `signOutUser` signs out a user, hides certain elements, and displays others.
+ */
+async function signOutUser() {
+    try {
+        await signOut(auth);
+        console.log('User signed out');
+        document.getElementById("add-task-field").style.display = "none";
+        document.getElementById("signout-button").style.display = "none";
+        document.getElementById("prompt-signin").style.display = "block";
+        document.getElementById("signup-button").style.display = "block";
+        document.getElementById("login-button").style.display = "block";
+        document.getElementById("login").style.display = "block";
+    } catch (e) {
+        console.error('Error signing out user', e);
+    }
+}
 
-// Add click event listener to validate email and password
-document.getElementById("signup-button").addEventListener("click", (e) => { 
-    validateSignupEmailAndPassword(e);
-    createUser(signupEmail.value, signupPassword.value);
 
-});
-// Add blur event listener to validate email and password
-signupEmail.addEventListener('input', (e) => validateSignupEmailAndPassword(e));
-signupPassword.addEventListener('input', (e) => validateSignupEmailAndPassword(e));
-
+/**
+ * The function `validateSignupEmailAndPassword` validates the email and password input fields in a
+ * signup form and displays appropriate messages based on the validation results.
+ * @param event - The `event` parameter in the `validateSignupEmailAndPassword` function is typically
+ * an event object that represents an event being handled, such as a form submission. In this case, the
+ * function is used to validate a signup form's email and password fields when the form is submitted.
+ * By calling `event
+ */
 function validateSignupEmailAndPassword(event) {
     event.preventDefault();
 
@@ -116,7 +158,6 @@ function validateSignupEmailAndPassword(event) {
         signupPassword.nextElementSibling.style.display = "none";
         signupPassword.nextElementSibling.nextElementSibling.style.display = "block";
     }
-
 }
 
 function loginUser(email, password) { 
