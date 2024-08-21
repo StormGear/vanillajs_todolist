@@ -117,6 +117,7 @@ async function signOutUser() {
     try {
         await signOut(auth);
         console.log('User signed out');
+        document.querySelector(".list-group").remove();
         document.getElementById("add-task-field").style.display = "none";
         document.getElementById("signout-button").style.display = "none";
         document.getElementById("prompt-signin").style.display = "block";
@@ -171,7 +172,10 @@ signInWithEmailAndPassword(auth, email, password)
     document.getElementById("prompt-signin").style.display = "none";
     document.getElementById("signup-button").style.display = "none";
     document.getElementById("login-button").style.display = "none";
-    document.getElementById("login").style.display = "none";
+    document.getElementById("login").style.display = "none"; 
+    const span = document.createElement('span');
+    span.innerText = `Signed in as ${user}`;
+    document.getElementById("login-link").appendChild(span);
     listenToTodosChanges();
   })
   .catch((error) => {
@@ -372,6 +376,7 @@ function listenToTodosChanges() {
         console.log('User not signed in');
         document.getElementById("add-task-field").style.display = "none";
         document.getElementById("signout-button").style.display = "none";
+        document.getElementById("login-link").removeChild(document.getElementById("login-link").children[1]);
     }
     } catch (e) { 
         console.error("Error listening to changes: ", e);
