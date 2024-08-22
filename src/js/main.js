@@ -47,6 +47,7 @@ document.getElementById("signup-button").addEventListener("click", (e) => {
     validateSignupEmailAndPassword(e);
     createUser(signupEmail.value, signupPassword.value);
 });
+
 // Add blur event listener to validate email and password
 signupEmail.addEventListener('input', (e) => validateSignupEmailAndPassword(e));
 signupPassword.addEventListener('input', (e) => validateSignupEmailAndPassword(e));
